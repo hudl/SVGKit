@@ -57,8 +57,9 @@
 //	effectiveFontSize = CGSizeApplyAffineTransform( CGSizeMake(0,effectiveFontSize), textTransformAbsolute ).height; // NB important that we apply a transform to a "CGSize" here, so that Apple's library handles worrying about whether to ignore skew transforms etc
 
 	/** Convert all whitespace to spaces, and trim leading/trailing (SVG doesn't support leading/trailing whitespace, and doesnt support CR LF etc) */
-	
-    NSString* effectiveText = self.textContent.mutableCopy; // FIXME: this is a TEMPORARY HACK, UNTIL PROPER PARSING OF <TSPAN> ELEMENTS IS ADDED
+
+    // The below `for` loop is a Hudl specific modification to apply the tspan element attributes dy and dx. 
+    NSString* effectiveText = self.textContent.mutableCopy;
     CGFloat totalTspanOffsetY = 0;
     CGFloat totalTspanOffsetX = 0;
     for (id childNode in self.childNodes.internalArray)
@@ -68,12 +69,11 @@
             SVGTspanElement *compareNode = (SVGTspanElement *)childNode;
             totalTspanOffsetX += [[compareNode.attributes getNamedItem:@"dx"].nodeValue integerValue];
             totalTspanOffsetY += [[compareNode.attributes getNamedItem:@"dy"].nodeValue integerValue];
-            effectiveText = [effectiveText stringByReplacingOccurrencesOfString:compareNode.textContent withString:[NSString stringWithFormat:@"%@\n", compareNode.textContent]];
         }
     }
 	
-	//effectiveText = [effectiveText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-	//effectiveText = [effectiveText stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+	effectiveText = [effectiveText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	effectiveText = [effectiveText stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
     
     /**
      Stroke color && stroke width

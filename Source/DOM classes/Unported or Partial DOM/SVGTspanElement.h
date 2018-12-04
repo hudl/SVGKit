@@ -8,6 +8,6 @@
 
 #import "SVGTextElement.h"
 
-@interface SVGTspanElement : SVGTextElement<ConverterSVGToCALayer, SVGTransformable>
+@interface SVGTspanElement : SVGTextElement
 
 @end

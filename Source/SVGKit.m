@@ -10,6 +10,8 @@
 
 @implementation SVGKit : NSObject
 
+// We stripped logging completely because of an incompatible CocoaLumberjack version.
+// ~BriCly
 + (void) enableLogging {
     //[DDLog addLogger:[DDASLLogger sharedInstance]];
     //[DDLog addLogger:[DDTTYLogger sharedInstance]];

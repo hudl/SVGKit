@@ -16,8 +16,6 @@
 #import "SVGRectElement.h"
 #import "SVGSwitchElement.h"
 #import "SVGTitleElement.h"
-#import "SVGTextElement.h"
-#import "SVGTspanElement.h"
 #import "TinySVGTextAreaElement.h"
 
 #import "SVGDocument_Mutable.h"
@@ -46,8 +44,6 @@ static NSDictionary *elementMap;
                           [SVGRectElement class], @"rect",
                           [SVGSwitchElement class], @"switch",
                           [SVGTitleElement class], @"title",
-                          //[SVGTextElement class], @"text",
-                          //[SVGTspanElement class], @"tspan",
                           [TinySVGTextAreaElement class], @"textArea",
 						   nil];
 		}

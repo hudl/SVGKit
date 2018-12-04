@@ -10,6 +10,8 @@
 
 #define SVGKIT_LOG_CONTEXT 556
 
+// We stripped logging completely because of an incompatible CocoaLumberjack version.
+// ~BriCly
 #define SVGKitLogError(frmt, ...)
 #define SVGKitLogWarn(frmt, ...)
 #define SVGKitLogInfo(frmt, ...)
