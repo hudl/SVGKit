@@ -6,6 +6,8 @@
 #import "SVGHelperUtilities.h"
 #import "SVGUtils.h"
 #import "SVGTextLayer.h"
+#import "NodeList+Mutable.h"
+#import "SVGTspanElement.h"
 
 @implementation SVGTextElement
 
@@ -29,6 +31,7 @@
 	 NB: the local bits (x/y offset) have to be pre-transformed by
 	 */
     CGRect viewport = CGRectFromSVGRect(self.rootOfCurrentDocumentFragment.viewBox);
+    
 	CGAffineTransform textTransformAbsoluteWithLocalPositionOffset = CGAffineTransformConcat( CGAffineTransformMakeTranslation( [self.x pixelsValueWithDimension:viewport.size.width], [self.y pixelsValueWithDimension:viewport.size.height]), textTransformAbsolute);
 	
 	/**
@@ -55,10 +58,22 @@
 
 	/** Convert all whitespace to spaces, and trim leading/trailing (SVG doesn't support leading/trailing whitespace, and doesnt support CR LF etc) */
 	
-	NSString* effectiveText = self.textContent; // FIXME: this is a TEMPORARY HACK, UNTIL PROPER PARSING OF <TSPAN> ELEMENTS IS ADDED
+    NSString* effectiveText = self.textContent.mutableCopy; // FIXME: this is a TEMPORARY HACK, UNTIL PROPER PARSING OF <TSPAN> ELEMENTS IS ADDED
+    CGFloat totalTspanOffsetY = 0;
+    CGFloat totalTspanOffsetX = 0;
+    for (id childNode in self.childNodes.internalArray)
+    {
+        if ([childNode isKindOfClass:[SVGTspanElement class]])
+        {
+            SVGTspanElement *compareNode = (SVGTspanElement *)childNode;
+            totalTspanOffsetX += [[compareNode.attributes getNamedItem:@"dx"].nodeValue integerValue];
+            totalTspanOffsetY += [[compareNode.attributes getNamedItem:@"dy"].nodeValue integerValue];
+            effectiveText = [effectiveText stringByReplacingOccurrencesOfString:compareNode.textContent withString:[NSString stringWithFormat:@"%@\n", compareNode.textContent]];
+        }
+    }
 	
-	effectiveText = [effectiveText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-	effectiveText = [effectiveText stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+	//effectiveText = [effectiveText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	//effectiveText = [effectiveText stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
     
     /**
      Stroke color && stroke width
@@ -115,10 +130,10 @@
     CGSize suggestedUntransformedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX), NULL);
     CFRelease(framesetter);
 	
-	CGRect unTransformedFinalBounds = CGRectMake( 0,
-											  0,
-											  suggestedUntransformedSize.width,
-											  suggestedUntransformedSize.height); // everything's been pre-scaled by [self transformAbsolute]
+	CGRect unTransformedFinalBounds = CGRectMake(totalTspanOffsetX,
+                                                 -totalTspanOffsetY,
+                                                 suggestedUntransformedSize.width + totalTspanOffsetX,
+                                                 suggestedUntransformedSize.height + totalTspanOffsetY); // everything's been pre-scaled by [self transformAbsolute]
 	
     CATextLayer *label = [SVGTextLayer layer];
     [SVGHelperUtilities configureCALayer:label usingElement:self];

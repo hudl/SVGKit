@@ -8,6 +8,7 @@
 #import "SVGUseElement.h"
 #import "SVGClipPathElement.h"
 #import "SVGSwitchElement.h"
+#import "SVGTspanElement.h"
 #import "NodeList+Mutable.h"
 
 #import "SVGSVGElement_Mutable.h" // so that changing .size can change the SVG's .viewport
@@ -657,6 +658,10 @@ static NSMutableDictionary* globalSVGKImageCache;
     if ( [element isKindOfClass:[SVGSwitchElement class]] )
     {
         childNodes = [(SVGSwitchElement*) element visibleChildNodes];
+    }
+    if ([element isKindOfClass:[SVGTspanElement class]] || [element isKindOfClass:[Text class]])
+    {
+        return nil;
     }
     /**
      Special handling for clip-path; need to create their children
