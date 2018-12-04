@@ -177,7 +177,7 @@ static float cachedDevicePixelsPerInch;
 	
 	if( [platform hasPrefix:@"iPhone"]) // catch-all for higher-end devices not yet existing
 	{
-		NSAssert(FALSE, @"Update your source code or disable assertions: you are using an iPhone that didn't exist when this code was written, we have no idea what the pixel count per inch is!");
+		//NSAssert(FALSE, @"Update your source code or disable assertions: you are using an iPhone that didn't exist when this code was written, we have no idea what the pixel count per inch is!");
 		return 401.0f;
 	}
 	
@@ -193,7 +193,7 @@ static float cachedDevicePixelsPerInch;
 	
 	if( [platform hasPrefix:@"iPod"]) // catch-all for higher-end devices not yet existing
 	{
-		NSAssert(FALSE, @"Update your source code or disable assertions: you are using an iPod that didn't exist when this code was written, we have no idea what the pixel count per inch is!");
+		//NSAssert(FALSE, @"Update your source code or disable assertions: you are using an iPod that didn't exist when this code was written, we have no idea what the pixel count per inch is!");
 		return 326.0f;
 	}
 	
@@ -214,7 +214,7 @@ static float cachedDevicePixelsPerInch;
     
 	if( [platform hasPrefix:@"iPad"]) // catch-all for higher-end devices not yet existing
 	{
-		NSAssert(FALSE, @"Update your source code or disable assertions: you are using an iPad that didn't exist when this code was written, we have no idea what the pixel count per inch is!");
+		//NSAssert(FALSE, @"Update your source code or disable assertions: you are using an iPad that didn't exist when this code was written, we have no idea what the pixel count per inch is!");
 		return 264.0f;
 	}
     
@@ -223,17 +223,17 @@ static float cachedDevicePixelsPerInch;
     
     if( [platform hasPrefix:@"iWatch"]) // catch-all for higher-end devices not yet existing
     {
-        NSAssert(FALSE, @"Update your source code or disable assertions: you are using an iWatch that didn't exist when this code was written, we have no idea what the pixel count per inch is!");
+        //NSAssert(FALSE, @"Update your source code or disable assertions: you are using an iWatch that didn't exist when this code was written, we have no idea what the pixel count per inch is!");
         return 326.0f;
     }
 	
 	if( [platform hasPrefix:@"x86_64"])
 	{
-		SVGKitLogWarn(@"[%@] WARNING: you are running on the simulator; it's impossible for us to calculate centimeter/millimeter/inches units correctly", [self class]);
+		//SVGKitLogWarn(@"[%@] WARNING: you are running on the simulator; it's impossible for us to calculate centimeter/millimeter/inches units correctly", [self class]);
 		return 132.0f; // Simulator, running on desktop machine
 	}
 	
-	NSAssert(FALSE, @"Cannot determine the PPI values for current device; returning 0.0f - hopefully this will crash your code (you CANNOT run SVG's that use CM/IN/MM etc until you fix this)" );
+	//NSAssert(FALSE, @"Cannot determine the PPI values for current device; returning 0.0f - hopefully this will crash your code (you CANNOT run SVG's that use CM/IN/MM etc until you fix this)" );
 	return 0.0f; // Bet you'll get a divide by zero here...
 }
 
